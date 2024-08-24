@@ -85,25 +85,18 @@ public class HealthTests(ITestOutputHelper log, TestApp testApplication)
     }
     
     [Fact]
-    public void TestcontainersTest()
+    public async Task HealthTest()
     {
-        var azurite = testApplication.GetContainer<AzuriteContainer>();
-        var postgree = testApplication.GetContainer<PostgreSqlContainer>("postgree");
-        
-        azurite.GetConnectionString()
+        var client = testApplication.CreateSignalRClient("/healthHub");
+        await client.StartAsync();
+
+        client.State
             .Should()
-            .NotBeNullOrWhiteSpace();
-        
-        azurite.State 
-            .Should()
-            .Be(TestcontainersStates.Running);
-        
-        postgree.GetConnectionString()
-            .Should()
-            .NotBeNullOrWhiteSpace();
-        postgree.State 
-            .Should()
-            .Be(TestcontainersStates.Running);
+            .Be(HubConnectionState.Connected);
+
+        var result = await client.InvokeAsync<string>("Health");
+        result.Should()
+            .Be("Healthy");
     }
 }
 ```

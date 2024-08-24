@@ -10,7 +10,7 @@ public class SignalRTests(ITestOutputHelper log, TestApp testApplication)
     [Fact]
     public async Task HealthTest()
     {
-        var client = testApplication.CreateSignalRClient("/");
+        var client = testApplication.CreateSignalRClient("/healthHub");
         await client.StartAsync();
 
         client.State

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedCode.IntegrationTestBaseKit", "ManagedCode.IntegrationTestBaseKit\ManagedCode.IntegrationTestBaseKit.csproj", "{0ECA08E3-AA22-4146-82C9-A7E58ED572EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagedCode.IntegrationTestBaseKit.Tests", "ManagedCode.IntegrationTestBaseKit.Tests\ManagedCode.IntegrationTestBaseKit.Tests.csproj", "{9ABD0D50-A2F4-4063-9E3F-A192C63F1919}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBlazorApp", "TestBlazorApp\TestBlazorApp.csproj", "{8841C369-320E-45F4-91C4-EA3BA5DA4E42}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0ECA08E3-AA22-4146-82C9-A7E58ED572EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ECA08E3-AA22-4146-82C9-A7E58ED572EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ECA08E3-AA22-4146-82C9-A7E58ED572EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ECA08E3-AA22-4146-82C9-A7E58ED572EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ABD0D50-A2F4-4063-9E3F-A192C63F1919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ABD0D50-A2F4-4063-9E3F-A192C63F1919}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ABD0D50-A2F4-4063-9E3F-A192C63F1919}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ABD0D50-A2F4-4063-9E3F-A192C63F1919}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8841C369-320E-45F4-91C4-EA3BA5DA4E42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8841C369-320E-45F4-91C4-EA3BA5DA4E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8841C369-320E-45F4-91C4-EA3BA5DA4E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8841C369-320E-45F4-91C4-EA3BA5DA4E42}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

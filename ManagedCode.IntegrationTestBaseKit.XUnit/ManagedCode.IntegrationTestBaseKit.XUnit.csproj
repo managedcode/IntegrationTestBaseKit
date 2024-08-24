@@ -21,10 +21,12 @@
 
     <ItemGroup>
         <PackageReference Include="xunit" Version="2.9.0"/>
-        <PackageReference Update="DotNet.ReproducibleBuilds" Version="1.2.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0"/>
+        <PackageReference Include="Microsoft.Playwright" Version="1.46.0"/>
+        <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="17.11.0"/>
+        <PackageReference Include="Testcontainers" Version="3.9.0"/>
     </ItemGroup>
 
 </Project>

@@ -23,7 +23,7 @@
 
         <RepositoryUrl>https://github.com/managedcode/IntegrationTestBaseKit</RepositoryUrl>
         <PackageProjectUrl>https://github.com/managedcode/IntegrationTestBaseKit</PackageProjectUrl>
-        <Product>Managed Code - Communication</Product>
+        <Product>Managed Code - IntegrationTestBaseKit</Product>
         <Version>0.0.1</Version>
         <PackageVersion>0.0.1</PackageVersion>
 
@@ -36,7 +36,7 @@
         <None Include="$(SolutionDir)\README.md" Pack="true" Visible="false" PackagePath="\"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+        <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

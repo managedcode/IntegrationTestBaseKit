@@ -1,3 +1,4 @@
+using ManagedCode.IntegrationTestBaseKit.XUnit;
 using TestBlazorApp;
 using Testcontainers.Azurite;
 using Testcontainers.PostgreSql;
@@ -5,13 +6,8 @@ using Testcontainers.PostgreSql;
 namespace ManagedCode.IntegrationTestBaseKit.Tests;
 
 [CollectionDefinition(nameof(TestApp))]
-public class TestApp : BaseTestApp<Program>, ICollectionFixture<TestApp>, IAsyncLifetime
+public class TestApp : BaseXUnitTestApp<Program>, ICollectionFixture<TestApp>
 {
-    public async Task DisposeAsync()
-    {
-        await base.DisposeAsync();
-    }
-
     protected override async Task ConfigureTestContainers()
     {
         AddContainer(new AzuriteBuilder().Build());

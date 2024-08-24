@@ -20,11 +20,15 @@ To install the library, use the following command:
 dotnet add package ManagedCode.IntegrationTestBaseKit
 ```
 
+for xUnit integration use the following command:
+```sh
+dotnet add package ManagedCode.ManagedCode.IntegrationTestBaseKit.XUnit
+```
+
 ## Usage
 
 Creating a Test Application
-Define a TestApp class that inherits from `BaseTestApp<TestBlazorApp.Program>`, implements `ICollectionFixture<TestApp>`
-and `IAsyncLifetime`.
+Define a TestApp class that inherits from `BaseXUnitTestApp<TestBlazorApp.Program>`, add `ICollectionFixture<TestApp>`
 
 ```csharp
 using DotNet.Testcontainers.Containers;
@@ -35,22 +39,12 @@ using Xunit;
 namespace ManagedCode.IntegrationTestBaseKit.Tests
 {
     [CollectionDefinition(nameof(TestApp))]
-    public class TestApp : BaseTestApp<TestBlazorApp.Program>, ICollectionFixture<TestApp>, IAsyncLifetime
+    public class TestApp : BaseXUnitTestApp<TestBlazorApp.Program>, ICollectionFixture<TestApp>
     {
         protected override async Task ConfigureTestContainers()
         {
             AddContainer(new AzuriteBuilder().Build());
             AddContainer("postgree", new PostgreSqlBuilder().Build());
-        }
-
-        public async Task DisposeAsync()
-        {
-            await base.DisposeAsync();
-        }
-
-        public async Task InitializeAsync()
-        {
-            // Initialization logic if needed
         }
     }
 }

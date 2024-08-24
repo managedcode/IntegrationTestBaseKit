@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using TestBlazorApp.Components;
+using TestBlazorApp.Hub;
 
 namespace TestBlazorApp;
 
@@ -40,6 +41,8 @@ public class Program
         {
             Predicate = r => r.Tags.Contains("live")
         });
+
+        app.MapHub<HealthHub>("/healthHub");
 
         app.Run();
     }

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+
+    <!--NuGet-->
+    <PropertyGroup>
+        <Title>ManagedCode.IntegrationTestBaseKit.XUnit</Title>
+        <PackageId>ManagedCode.IntegrationTestBaseKit.XUnit</PackageId>
+        <Description>Extensions for ASP.NET for managing Docker containers in integration tests.</Description>
+        <PackageTags>managedcode, docker, integration testing, asp.net, containers, testcontainers, csharp</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ManagedCode.IntegrationTestBaseKit\ManagedCode.IntegrationTestBaseKit.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="xunit" Version="2.9.0"/>
+        <PackageReference Update="DotNet.ReproducibleBuilds" Version="1.2.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+</Project>

@@ -11,7 +11,8 @@ using Microsoft.Playwright;
 
 namespace ManagedCode.IntegrationTestBaseKit;
 
-public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoint> where TEntryPoint : class
+public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoint> 
+    where TEntryPoint : class
 {
     private IHost? _host;
 

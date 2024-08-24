@@ -15,7 +15,7 @@ internal class PlaywrightWrapper
             Headless = true
         });
     }
-    
+
     public async Task InitializeAsync(BrowserTypeLaunchOptions options)
     {
         await PlaywrightInstaller.Install();

@@ -1,14 +1,19 @@
 # IntegrationTestBaseKit
 
 ## Overview
-IntegrationTestBaseKit is a library designed to facilitate the creation and management of Docker containers for integration testing purposes. It provides a set of tools to start, stop, and check the readiness of Docker containers in a thread-safe manner.
+
+IntegrationTestBaseKit is a library designed to facilitate the creation and management of Docker containers for
+integration testing purposes. It provides a set of tools to start, stop, and check the readiness of Docker containers in
+a thread-safe manner.
 
 ## Features
+
 - Start and stop Docker containers asynchronously.
 - Check container readiness using customizable wait strategies.
 - Event-driven notifications for container lifecycle events (starting, started, stopping, stopped).
 
 ## Installation
+
 To install the library, use the following command:
 
 ```sh
@@ -16,9 +21,10 @@ dotnet add package ManagedCode.IntegrationTestBaseKit
 ```
 
 ## Usage
-Creating a Test Application
-Define a TestApp class that inherits from `BaseTestApp<TestBlazorApp.Program>`, implements `ICollectionFixture<TestApp>` and `IAsyncLifetime`.
 
+Creating a Test Application
+Define a TestApp class that inherits from `BaseTestApp<TestBlazorApp.Program>`, implements `ICollectionFixture<TestApp>`
+and `IAsyncLifetime`.
 
 ```csharp
 using DotNet.Testcontainers.Containers;
@@ -51,8 +57,8 @@ namespace ManagedCode.IntegrationTestBaseKit.Tests
 ```
 
 ## Writing Tests
-Use the TestApp class in your tests to manage Docker containers.
 
+Use the TestApp class in your tests to manage Docker containers.
 
 ```csharp
 using DotNet.Testcontainers.Containers;

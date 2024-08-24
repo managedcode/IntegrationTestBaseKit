@@ -11,34 +11,14 @@ using Microsoft.Playwright;
 
 namespace ManagedCode.IntegrationTestBaseKit;
 
-public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoint>
-    where TEntryPoint : class
+public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoint> where TEntryPoint : class
 {
     private IHost? _host;
-    
-    private PlaywrightWrapper Fixture { get; } = new ();
 
-    private void EnsureServer()
-    {
-        if (_host is null)
-        {
-            // This forces WebApplicationFactory to bootstrap the server  
-            using var _ = CreateDefaultClient();
-        }
-    }
-    
+    private PlaywrightWrapper Fixture { get; } = new();
+
     protected Dictionary<string, DockerContainer> Containers { get; } = new();
-    
-    public T GetContainer<T>(string name) where T : DockerContainer
-    {
-        return (T)Containers[name];
-    }
-    
-    public T GetContainer<T>() where T : DockerContainer
-    {
-        return (T)Containers[typeof(T).Name];
-    }
-    
+
     public IBrowser Browser => Fixture.Browser;
 
     public Uri ServerUri
@@ -58,16 +38,34 @@ public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoi
             return ClientOptions.BaseAddress.ToString();
         }
     }
+
+    private void EnsureServer()
+    {
+        if (_host is null)
+        {
+            // This forces WebApplicationFactory to bootstrap the server  
+            using var _ = CreateDefaultClient();
+        }
+    }
+
+    public T GetContainer<T>(string name) where T : DockerContainer
+    {
+        return (T)Containers[name];
+    }
+
+    public T GetContainer<T>() where T : DockerContainer
+    {
+        return (T)Containers[typeof(T).Name];
+    }
+
     public virtual async Task InitializeAsync()
     {
         await ConfigureTestContainers();
         await Fixture.InitializeAsync();
         foreach (var container in Containers)
-        {
             await container.Value.StartAsync();
-        }
     }
-    
+
     protected override IHost CreateHost(IHostBuilder builder)
     {
         var testHost = builder.Build();
@@ -89,7 +87,7 @@ public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoi
     {
         builder.UseEnvironment("Development");
     }
-    
+
     public override async ValueTask DisposeAsync()
     {
         await Fixture.DisposeAsync();
@@ -98,6 +96,7 @@ public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoi
             await container.Value.StopAsync();
             await container.Value.DisposeAsync();
         }
+
         await base.DisposeAsync();
     }
 
@@ -122,7 +121,7 @@ public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoi
             })
             .Build();
     }
-    
+
     public async Task<IPage> OpenNewPage(string url)
     {
         var fullUrl = new Uri(ServerUri, url).ToString();
@@ -131,15 +130,16 @@ public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoi
         await page.GotoAsync(fullUrl);
         return page;
     }
-    
+
     protected void AddContainer(string name, DockerContainer container)
     {
         Containers.Add(name, container);
     }
-    
+
     protected void AddContainer(DockerContainer container)
     {
-        Containers.Add(container.GetType().Name, container);
+        Containers.Add(container.GetType()
+            .Name, container);
     }
 
     protected abstract Task ConfigureTestContainers();

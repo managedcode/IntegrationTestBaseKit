@@ -1,4 +1,7 @@
 using FluentAssertions;
+using TestBlazorApp;
+using Testcontainers.Azurite;
+using Testcontainers.PostgreSql;
 using Xunit.Abstractions;
 
 namespace ManagedCode.IntegrationTestBaseKit.Tests;
@@ -22,5 +25,19 @@ public class HealthTests(ITestOutputHelper log, TestApp testApplication)
         content.Contains("Healthy")
             .Should()
             .BeTrue();
+    }
+
+    [Fact]
+    public void ConnectionStringTest()
+    {
+        StaticContainer.AzureBlobConnectionString
+            .Should()
+            .Be(testApplication.GetContainer<AzuriteContainer>()
+                .GetConnectionString());
+
+        StaticContainer.PostgreSqlConnectionString
+            .Should()
+            .Be(testApplication.GetContainer<PostgreSqlContainer>("postgree")
+                .GetConnectionString());
     }
 }

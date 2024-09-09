@@ -5,17 +5,20 @@ using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Connections.Client;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Playwright;
 
 namespace ManagedCode.IntegrationTestBaseKit;
 
-public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoint> 
-    where TEntryPoint : class
+public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoint> where TEntryPoint : class
 {
     private IHost? _host;
 
+    private readonly ConfigurationBuilder ConfigurationBuilder = new();
+
+    protected virtual bool UsePlaywright { get; } = true;
     private PlaywrightWrapper Fixture { get; } = new();
 
     protected Dictionary<string, DockerContainer> Containers { get; } = new();
@@ -62,18 +65,44 @@ public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoi
     public virtual async Task InitializeAsync()
     {
         await ConfigureTestContainers();
-        await Fixture.InitializeAsync();
+
+        if (UsePlaywright)
+            await Fixture.InitializeAsync();
+
         foreach (var container in Containers)
             await container.Value.StartAsync();
     }
 
     protected override IHost CreateHost(IHostBuilder builder)
     {
+        ConfigureConfiguration();
+        var configuration = ConfigurationBuilder.Build();
+        builder.ConfigureWebHost(hostBuilder =>
+        {
+            foreach (var setting in configuration.AsEnumerable(true))
+                hostBuilder.UseSetting(setting.Key, setting.Value);
+        });
+
+        // Create the host for TestServer now before we  
+        // modify the builder to use Kestrel instead.    
         var testHost = builder.Build();
+
+        // Modify the host builder to use Kestrel instead  
+        // of TestServer so we can listen on a real address.    
         builder.ConfigureWebHost(hostBuilder => hostBuilder.UseKestrel());
-        _host = builder.Build();
+
+        // Create and start the Kestrel server before the test server,  
+        // otherwise due to the way the deferred host builder works    
+        // for minimal hosting, the server will not get "initialized    
+        // enough" for the address it is listening on to be available.    
+        // See https://github.com/dotnet/aspnetcore/issues/33846.    
+        _host = builder.Build(); //base.CreateHost(builder);
         _host.Start();
 
+        // Extract the selected dynamic port out of the Kestrel server  
+        // and assign it onto the client options for convenience so it    
+        // "just works" as otherwise it'll be the default http://localhost    
+        // URL, which won't route to the Kestrel-hosted HTTP server.     
         var server = _host.Services.GetRequiredService<IServer>();
         var addressFeature = server.Features.Get<IServerAddressesFeature>();
         ClientOptions.BaseAddress = addressFeature!.Addresses
@@ -84,13 +113,9 @@ public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoi
         return testHost;
     }
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
-    {
-        builder.UseEnvironment("Development");
-    }
-
     public override async ValueTask DisposeAsync()
     {
+        _host?.Dispose();
         await Fixture.DisposeAsync();
         foreach (var container in Containers)
         {
@@ -125,6 +150,9 @@ public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoi
 
     public async Task<IPage> OpenNewPage(string url)
     {
+        if (!UsePlaywright)
+            throw new InvalidOperationException("Playwright is not enabled");
+
         var fullUrl = new Uri(ServerUri, url).ToString();
         var context = await Browser.NewContextAsync();
         var page = await context.NewPageAsync();
@@ -144,4 +172,10 @@ public abstract class BaseTestApp<TEntryPoint> : WebApplicationFactory<TEntryPoi
     }
 
     protected abstract Task ConfigureTestContainers();
+    protected abstract void ConfigureConfiguration();
+
+    protected void SetConfigurationValue(string key, string value)
+    {
+        ConfigurationBuilder.AddInMemoryCollection(new Dictionary<string, string> { { key, value } }!);
+    }
 }

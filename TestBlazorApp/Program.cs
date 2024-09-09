@@ -21,6 +21,11 @@ public class Program
             .AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
 
+
+        StaticContainer.PostgreSqlConnectionString = builder.Configuration.GetConnectionString("PostgreSql");
+        StaticContainer.AzureBlobConnectionString = builder.Configuration.GetValue<string>("AzureBlob");
+
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
